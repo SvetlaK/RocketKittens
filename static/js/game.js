@@ -234,51 +234,55 @@ function drawKitten(player) {
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Ears - triangular and pointy
+    // Ears - on top of head, triangular and pointy
     ctx.fillStyle = player.color;
+    // Left ear
     ctx.beginPath();
-    ctx.moveTo(pos.x - 18, pos.y - 55);
-    ctx.lineTo(pos.x - 8, pos.y - 35);
-    ctx.lineTo(pos.x - 22, pos.y - 38);
+    ctx.moveTo(pos.x - 14, pos.y - 58);  // tip
+    ctx.lineTo(pos.x - 18, pos.y - 48);  // bottom left
+    ctx.lineTo(pos.x - 6, pos.y - 50);   // bottom right
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
     
+    // Right ear
     ctx.beginPath();
-    ctx.moveTo(pos.x + 18, pos.y - 55);
-    ctx.lineTo(pos.x + 8, pos.y - 35);
-    ctx.lineTo(pos.x + 22, pos.y - 38);
+    ctx.moveTo(pos.x + 14, pos.y - 58);  // tip
+    ctx.lineTo(pos.x + 18, pos.y - 48);  // bottom right
+    ctx.lineTo(pos.x + 6, pos.y - 50);   // bottom left
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
     
     // Inner ears (pink)
     ctx.fillStyle = '#ffb6c1';
+    // Left inner ear
     ctx.beginPath();
-    ctx.moveTo(pos.x - 16, pos.y - 50);
-    ctx.lineTo(pos.x - 10, pos.y - 38);
-    ctx.lineTo(pos.x - 19, pos.y - 40);
+    ctx.moveTo(pos.x - 13, pos.y - 55);
+    ctx.lineTo(pos.x - 15, pos.y - 49);
+    ctx.lineTo(pos.x - 8, pos.y - 50);
     ctx.closePath();
     ctx.fill();
     
+    // Right inner ear
     ctx.beginPath();
-    ctx.moveTo(pos.x + 16, pos.y - 50);
-    ctx.lineTo(pos.x + 10, pos.y - 38);
-    ctx.lineTo(pos.x + 19, pos.y - 40);
+    ctx.moveTo(pos.x + 13, pos.y - 55);
+    ctx.lineTo(pos.x + 15, pos.y - 49);
+    ctx.lineTo(pos.x + 8, pos.y - 50);
     ctx.closePath();
     ctx.fill();
     
-    // Stripes/markings for Whiskers (orange tabby style)
+    // Stripes/markings for Whiskers (orange tabby style) - on forehead
     if (isWhiskers) {
         ctx.strokeStyle = '#cc6600';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(pos.x - 5, pos.y - 52);
-        ctx.lineTo(pos.x - 5, pos.y - 45);
-        ctx.moveTo(pos.x, pos.y - 54);
-        ctx.lineTo(pos.x, pos.y - 46);
-        ctx.moveTo(pos.x + 5, pos.y - 52);
-        ctx.lineTo(pos.x + 5, pos.y - 45);
+        ctx.moveTo(pos.x - 4, pos.y - 50);
+        ctx.lineTo(pos.x - 4, pos.y - 44);
+        ctx.moveTo(pos.x, pos.y - 52);
+        ctx.lineTo(pos.x, pos.y - 45);
+        ctx.moveTo(pos.x + 4, pos.y - 50);
+        ctx.lineTo(pos.x + 4, pos.y - 44);
         ctx.stroke();
     }
     
@@ -386,8 +390,8 @@ function drawKitten(player) {
     ctx.strokeStyle = '#333';
     ctx.lineWidth = 3;
     const name = getKittenName(player.id);
-    ctx.strokeText(name, pos.x, pos.y - 70);
-    ctx.fillText(name, pos.x, pos.y - 70);
+    ctx.strokeText(name, pos.x, pos.y - 75);
+    ctx.fillText(name, pos.x, pos.y - 75);
     
     // Aim indicator when it's this kitten's turn
     if (player.id === gameState.current_player_id && gameState.phase === 'aiming') {
