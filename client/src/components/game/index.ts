@@ -4,3 +4,8 @@ export { Terrain, Sky, Clouds, WindIndicator } from "./Terrain";
 export { Kitten, HealthBar3D } from "./Kitten";
 export { YarnBall, TrajectoryPreview, ActualTrajectory, ImpactEffect } from "./YarnBall";
 export { SoundManager } from "./SoundManager";
+export { TrajectoryLabPanel, HeatmapVisualization, TrajectoryComparison } from "./TrajectoryLab";
+export { SmartYarnBall, SmartYarnPanel, ReachableAreaVisualization } from "./SmartYarn";
+export { AutopilotPanel, LearningCurve } from "./AutopilotKitten";
+export { FogOfYarnPanel, UncertaintyVisualization, ParticleVisualization, RadarSweep } from "./FogOfYarn";
+export { AIFeaturesToggle } from "./AIFeaturesPanel";

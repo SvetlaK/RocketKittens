@@ -2,6 +2,7 @@ import { useRocketKittens, Player } from "@/lib/stores/useRocketKittens";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
+import { AIFeaturesToggle } from "./AIFeaturesPanel";
 
 export function GameUI() {
   const { 
@@ -26,6 +27,10 @@ export function GameUI() {
         players={players}
         currentPlayerId={currentPlayerId}
       />
+      
+      {(phase === "aiming" || phase === "shooting" || phase === "turn_end") && (
+        <AIFeaturesToggle />
+      )}
       
       {currentPlayer && (phase === "aiming" || phase === "shooting") && (
         <ControlPanel 
