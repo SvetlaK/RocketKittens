@@ -4,133 +4,104 @@
 RocketKittens is a turn-based artillery game where two kittens take turns shooting yarn balls at each other. The game features realistic ballistic physics with wind effects, trajectory prediction, and four aerospace AI subsystems that demonstrate real-world concepts like Monte Carlo simulation, Model Predictive Control, Reinforcement Learning, and Sensor Fusion.
 
 ## Current State
-Full game with AI features complete:
+**Rewritten in Python** with Flask backend and HTML5 Canvas frontend:
 - Two-player turn-based artillery combat
 - Physics-based yarn projectile system with gravity, wind, and drag
-- Trajectory prediction overlay
+- Trajectory prediction overlay (updates in real-time)
 - Health system and win/loss conditions
 - Visual kitten characters with aim indicators
 - **Trajectory Lab**: Monte Carlo simulation with hit probability analysis
-- **Smart Yarn**: MPC-guided projectile with mid-flight corrections
 - **Autopilot Kitten**: RL and supervised learning AI opponents
-- **Fog of Yarn**: Kalman/Particle filter sensor fusion
+- WebSocket-based real-time game state synchronization
 
 ## Project Architecture
 
-### Frontend Structure (client/src/)
+### Backend (Python/Flask)
 ```
-lib/
-  physics/
-    ballistics.ts     # Core physics engine with trajectory calculations
-    guidance.ts       # MPC guidance system for Smart Yarn
-  ai/
-    reinforcement.ts  # Q-Learning and Supervised agents for Autopilot
-    sensorFusion.ts   # Kalman and Particle filters for Fog of Yarn
-  stores/
-    useRocketKittens.ts  # Game state management (Zustand)
-    useAudio.tsx         # Audio state management
-components/
+app.py                      # Main Flask application with SocketIO
+server/
   game/
-    GameScene.tsx        # Main 3D game scene with Three.js
-    GameUI.tsx           # React UI components (menus, controls, HUD)
-    AIFeaturesPanel.tsx  # AI features toggle bar
-    TrajectoryLab.tsx    # Monte Carlo simulation UI
-    SmartYarn.tsx        # MPC guided projectile UI
-    AutopilotKitten.tsx  # RL agent UI
-    FogOfYarn.tsx        # Sensor fusion UI
-    Terrain.tsx          # Ground, sky, and environment
-    Kitten.tsx           # Player character rendering
-    YarnBall.tsx         # Projectile and trajectory visualization
-    SoundManager.tsx     # Audio initialization
+    ballistics.py           # Core physics engine
+  ai/
+    monte_carlo.py          # Monte Carlo simulation
+    guidance.py             # MPC guidance system
+    reinforcement.py        # Q-Learning and Supervised agents
+    sensor_fusion.py        # Kalman and Particle filters
 ```
 
-### Physics Engine (ballistics.ts)
+### Frontend (HTML5/Canvas)
+```
+templates/
+  index.html                # Main game page
+static/
+  css/
+    style.css               # Game styling
+  js/
+    game.js                 # Canvas rendering and game logic
+```
+
+### Physics Engine (ballistics.py)
 Pure functions for deterministic simulation:
-- `simulateTrajectory()` - Full physics simulation with collision detection
-- `predictTrajectory()` - Preview calculation without randomness
-- `monteCarloSimulation()` - Run N simulations with noise for hit probability
-- `calculateDamage()` - Impact velocity to damage conversion
-- `generateWind()` - Random wind generation per turn
+- `simulate_trajectory()` - Full physics simulation with collision detection
+- `predict_trajectory()` - Preview calculation without randomness
+- `calculate_damage()` - Impact velocity to damage conversion
+- `generate_wind()` - Random wind generation per turn
+- `PhysicsConfig` - Configurable physics parameters
 
-### Guidance System (guidance.ts)
+### AI Modules
+
+#### Monte Carlo (monte_carlo.py)
+- `monte_carlo_simulation()` - Run N simulations with noise for hit probability
+- Configurable noise parameters for wind, angle, and power
+- Returns hit probability and trajectory statistics
+
+#### Guidance System (guidance.py)
 Model Predictive Control for Smart Yarn:
-- `mpcSolver()` - Optimal impulse calculation
-- `simulateGuidedTrajectory()` - Full guided trajectory simulation
-- `calculateOptimalImpulse()` - Proportional navigation
-- `calculateReachableArea()` - Reachable envelope visualization
+- `GuidanceConfig` - Impulse budget and strength settings
+- `calculate_optimal_impulse()` - Proportional navigation
+- `simulate_guided_trajectory()` - Full guided trajectory with corrections
 
-### AI Agents (reinforcement.ts)
+#### Reinforcement Learning (reinforcement.py)
 - `QLearningAgent` - Tabular Q-learning with epsilon-greedy exploration
 - `SupervisedAgent` - Optimal solver using grid search
-- Experience replay buffer for batch learning
-- Policy comparison utilities
+- State discretization for compact Q-table
 
-### Sensor Fusion (sensorFusion.ts)
+#### Sensor Fusion (sensor_fusion.py)
 - `KalmanFilter` - Linear Gaussian state estimation
 - `ParticleFilter` - Non-linear tracking with resampling
-- Noisy measurement generation
-- Occlusion modeling
-
-## AI Feature Details
-
-### 1. Trajectory Lab
-Monte Carlo simulation for trajectory analysis:
-- Run 100-1000 simulations with configurable noise
-- Display hit probability percentage
-- Show trajectory statistics (distance, flight time, max height)
-- Configurable wind, angle, and power noise parameters
-
-### 2. Smart Yarn (Guided Projectile)
-MPC-based mid-flight course correction:
-- Configurable max impulses (1-5)
-- Adjustable impulse strength
-- Correction interval settings
-- Visual impulse effects during flight
-- Reachable area envelope preview
-
-### 3. Autopilot Kitten (AI Opponent)
-Two learning modes:
-- **Supervised**: Optimal trajectory solver using physics simulation
-- **RL Agent**: Q-learning that improves through gameplay
-- Apply suggested angle/power or auto-fire
-- Exploration rate visualization
-
-### 4. Fog of Yarn (Sensor Fusion)
-Tracking under uncertainty:
-- Kalman Filter: Fast, optimal for linear systems
-- Particle Filter: Robust for non-linear dynamics
-- Configurable measurement noise
-- Occlusion probability simulation
-- Uncertainty visualization with confidence metrics
+- `generate_noisy_measurement()` - Simulated sensor noise
 
 ## Recent Changes
+- 2026-01-24: **Complete Python rewrite**
+  - Flask backend with Flask-SocketIO for real-time updates
+  - HTML5 Canvas frontend replacing React/Three.js
+  - All physics and AI modules ported to Python
+  - WebSocket-based game state synchronization
+
 - 2026-01-24: Added aerospace AI features
   - Trajectory Lab with Monte Carlo simulation
   - Smart Yarn with MPC guidance
   - Autopilot Kitten with RL/Supervised learning
   - Fog of Yarn with Kalman/Particle filters
-  - AI features toggle panel in game UI
-
-- 2026-01-24: Initial MVP implementation
-  - Physics engine with gravity, wind, drag
-  - Turn-based gameplay loop
-  - Visual kitten characters with aim indicators
-  - Trajectory preview system
-  - Health and damage system
 
 ## Technologies
-- React 18 with TypeScript
-- Three.js via @react-three/fiber and @react-three/drei
-- Zustand for state management
-- Tailwind CSS for UI styling
-- Express.js backend (minimal, for serving)
+- Python 3.11
+- Flask with Flask-SocketIO
+- HTML5 Canvas for rendering
+- NumPy for numerical computation
+- Eventlet for async WebSocket handling
+
+## Running the Game
+```bash
+python app.py
+```
+The game will be available at http://localhost:5000
 
 ## Controls
 - W/S or Up/Down: Adjust angle
 - A/D or Left/Right: Adjust power  
 - Space: Fire yarn ball
-- Mouse: Orbit camera view
-- AI Feature buttons: Toggle aerospace simulations
+- AI Feature buttons: Access Monte Carlo and Autopilot
 
 ## Aerospace Concepts Demonstrated
 1. **Digital Twin**: Physics engine as deterministic model

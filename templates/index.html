@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RocketKittens - Artillery Game</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.min.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="1200" height="600"></canvas>
+        
+        <div id="menu" class="overlay">
+            <h1>RocketKittens</h1>
+            <p>Turn-based artillery with aerospace AI</p>
+            <button id="startBtn">Start Game</button>
+        </div>
+        
+        <div id="game-over" class="overlay hidden">
+            <h1>Game Over!</h1>
+            <p id="winner-text"></p>
+            <button id="restartBtn">Play Again</button>
+        </div>
+        
+        <div id="hud" class="hidden">
+            <div id="player-info">
+                <div id="current-player"></div>
+                <div id="wind-info"></div>
+            </div>
+            
+            <div id="controls-info">
+                <div>Angle: <span id="angle-display">45</span>°</div>
+                <div>Power: <span id="power-display">50</span>%</div>
+                <div class="controls-hint">W/S: Angle | A/D: Power | Space: Fire</div>
+            </div>
+            
+            <div id="health-bars">
+                <div class="health-bar" id="player1-health">
+                    <div class="health-fill red"></div>
+                    <span>Player 1</span>
+                </div>
+                <div class="health-bar" id="player2-health">
+                    <div class="health-fill blue"></div>
+                    <span>Player 2</span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ai-panel" class="hidden">
+            <h3>AI Features</h3>
+            <div class="ai-buttons">
+                <button id="trajectoryLabBtn" class="ai-btn">Trajectory Lab</button>
+                <button id="smartYarnBtn" class="ai-btn">Smart Yarn</button>
+                <button id="autopilotBtn" class="ai-btn">Autopilot</button>
+                <button id="fogOfYarnBtn" class="ai-btn">Fog of Yarn</button>
+            </div>
+            
+            <div id="trajectory-lab" class="ai-feature hidden">
+                <h4>Monte Carlo Simulation</h4>
+                <div class="slider-group">
+                    <label>Simulations: <span id="num-sims-display">100</span></label>
+                    <input type="range" id="num-sims" min="50" max="500" value="100">
+                </div>
+                <button id="runMonteCarloBtn">Run Simulation</button>
+                <div id="monte-carlo-result"></div>
+            </div>
+            
+            <div id="autopilot-panel" class="ai-feature hidden">
+                <h4>AI Autopilot</h4>
+                <select id="ai-mode">
+                    <option value="supervised">Supervised (Optimal)</option>
+                    <option value="rl">Reinforcement Learning</option>
+                </select>
+                <button id="getSuggestionBtn">Get Suggestion</button>
+                <div id="ai-suggestion"></div>
+                <button id="applySuggestionBtn" class="hidden">Apply & Fire</button>
+            </div>
+            
+            <div id="smart-yarn-panel" class="ai-feature hidden">
+                <h4>Smart Yarn (MPC Guidance)</h4>
+                <div class="slider-group">
+                    <label>Max Impulses: <span id="impulses-display">3</span></label>
+                    <input type="range" id="max-impulses" min="1" max="5" value="3">
+                </div>
+                <div class="slider-group">
+                    <label>Impulse Strength: <span id="strength-display">5.0</span></label>
+                    <input type="range" id="impulse-strength" min="1" max="10" value="5" step="0.5">
+                </div>
+                <button id="runGuidedBtn">Preview Guided Trajectory</button>
+                <div id="smart-yarn-result"></div>
+            </div>
+            
+            <div id="fog-yarn-panel" class="ai-feature hidden">
+                <h4>Fog of Yarn (Sensor Fusion)</h4>
+                <select id="filter-type">
+                    <option value="kalman">Kalman Filter</option>
+                    <option value="particle">Particle Filter</option>
+                </select>
+                <div class="slider-group">
+                    <label>Noise Level: <span id="noise-display">1.0</span></label>
+                    <input type="range" id="noise-level" min="0.5" max="5" value="1" step="0.5">
+                </div>
+                <button id="updateEstimateBtn">Update Estimate</button>
+                <div id="fog-yarn-result"></div>
+            </div>
+        </div>
+        
+        <div id="turn-end-panel" class="hidden">
+            <button id="nextTurnBtn">Next Turn</button>
+        </div>
+    </div>
+    
+    <script src="/static/js/game.js"></script>
+</body>
+</html>

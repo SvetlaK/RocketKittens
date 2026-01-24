@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1a1a2e;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#game-container {
+    position: relative;
+    width: 1200px;
+    height: 600px;
+}
+
+#gameCanvas {
+    background: linear-gradient(to bottom, #87CEEB 0%, #B0E0E6 50%, #228B22 50%, #32CD32 100%);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.overlay h1 {
+    font-size: 4rem;
+    color: #f39c12;
+    text-shadow: 3px 3px 0 #e74c3c;
+    margin-bottom: 1rem;
+}
+
+.overlay p {
+    font-size: 1.2rem;
+    color: #bdc3c7;
+    margin-bottom: 2rem;
+}
+
+.overlay button {
+    padding: 1rem 3rem;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.overlay button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(231, 76, 60, 0.5);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+}
+
+#hud > div {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 8px;
+    pointer-events: auto;
+}
+
+#current-player {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#wind-info {
+    font-size: 0.9rem;
+    color: #3498db;
+}
+
+#controls-info {
+    text-align: center;
+}
+
+#controls-info .controls-hint {
+    font-size: 0.8rem;
+    color: #95a5a6;
+    margin-top: 5px;
+}
+
+#health-bars {
+    display: flex;
+    gap: 20px;
+}
+
+.health-bar {
+    width: 150px;
+    position: relative;
+}
+
+.health-bar span {
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.health-fill {
+    height: 20px;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.health-fill.red {
+    background: linear-gradient(to right, #c0392b, #e74c3c);
+}
+
+.health-fill.blue {
+    background: linear-gradient(to right, #2980b9, #3498db);
+}
+
+#ai-panel {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 350px;
+}
+
+#ai-panel h3 {
+    color: #f39c12;
+    margin-bottom: 10px;
+}
+
+.ai-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.ai-btn {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    background: #34495e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ai-btn:hover {
+    background: #4a6278;
+}
+
+.ai-btn.active {
+    background: #9b59b6;
+}
+
+.ai-feature {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #444;
+}
+
+.ai-feature h4 {
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.slider-group {
+    margin-bottom: 10px;
+}
+
+.slider-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.slider-group input[type="range"] {
+    width: 100%;
+}
+
+#ai-panel button:not(.ai-btn) {
+    padding: 8px 16px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+#ai-panel button:not(.ai-btn):hover {
+    background: #2ecc71;
+}
+
+#monte-carlo-result, #ai-suggestion {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+#ai-panel select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #2c3e50;
+    color: white;
+    border: 1px solid #34495e;
+    border-radius: 5px;
+}
+
+#turn-end-panel {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#turn-end-panel button {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+#turn-end-panel button:hover {
+    animation: none;
+    transform: scale(1.1);
+}
