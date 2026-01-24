@@ -234,22 +234,23 @@ function drawKitten(player) {
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Ears - on top of head, triangular and pointy
+    // Ears - on outer edge of head circle, triangular and pointy
+    // Head is at pos.y - 40 with radius 22, so outer edges are at pos.x +/- 22
     ctx.fillStyle = player.color;
-    // Left ear
+    // Left ear - positioned at outer left edge of head
     ctx.beginPath();
-    ctx.moveTo(pos.x - 14, pos.y - 58);  // tip
-    ctx.lineTo(pos.x - 18, pos.y - 48);  // bottom left
-    ctx.lineTo(pos.x - 6, pos.y - 50);   // bottom right
+    ctx.moveTo(pos.x - 28, pos.y - 65);  // tip pointing up and outward
+    ctx.lineTo(pos.x - 20, pos.y - 50);  // bottom outer
+    ctx.lineTo(pos.x - 12, pos.y - 55);  // bottom inner (connects to head)
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
     
-    // Right ear
+    // Right ear - positioned at outer right edge of head
     ctx.beginPath();
-    ctx.moveTo(pos.x + 14, pos.y - 58);  // tip
-    ctx.lineTo(pos.x + 18, pos.y - 48);  // bottom right
-    ctx.lineTo(pos.x + 6, pos.y - 50);   // bottom left
+    ctx.moveTo(pos.x + 28, pos.y - 65);  // tip pointing up and outward
+    ctx.lineTo(pos.x + 20, pos.y - 50);  // bottom outer
+    ctx.lineTo(pos.x + 12, pos.y - 55);  // bottom inner (connects to head)
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
@@ -258,17 +259,17 @@ function drawKitten(player) {
     ctx.fillStyle = '#ffb6c1';
     // Left inner ear
     ctx.beginPath();
-    ctx.moveTo(pos.x - 13, pos.y - 55);
-    ctx.lineTo(pos.x - 15, pos.y - 49);
-    ctx.lineTo(pos.x - 8, pos.y - 50);
+    ctx.moveTo(pos.x - 26, pos.y - 62);
+    ctx.lineTo(pos.x - 20, pos.y - 52);
+    ctx.lineTo(pos.x - 14, pos.y - 55);
     ctx.closePath();
     ctx.fill();
     
     // Right inner ear
     ctx.beginPath();
-    ctx.moveTo(pos.x + 13, pos.y - 55);
-    ctx.lineTo(pos.x + 15, pos.y - 49);
-    ctx.lineTo(pos.x + 8, pos.y - 50);
+    ctx.moveTo(pos.x + 26, pos.y - 62);
+    ctx.lineTo(pos.x + 20, pos.y - 52);
+    ctx.lineTo(pos.x + 14, pos.y - 55);
     ctx.closePath();
     ctx.fill();
     
@@ -390,8 +391,8 @@ function drawKitten(player) {
     ctx.strokeStyle = '#333';
     ctx.lineWidth = 3;
     const name = getKittenName(player.id);
-    ctx.strokeText(name, pos.x, pos.y - 75);
-    ctx.fillText(name, pos.x, pos.y - 75);
+    ctx.strokeText(name, pos.x, pos.y - 80);
+    ctx.fillText(name, pos.x, pos.y - 80);
     
     // Aim indicator when it's this kitten's turn
     if (player.id === gameState.current_player_id && gameState.phase === 'aiming') {
