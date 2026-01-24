@@ -124,31 +124,37 @@ export function TrajectoryPreview({
   color = "#ffffff",
   dashed = true 
 }: TrajectoryPreviewProps) {
-  if (points.length < 2) return null;
-
-  const linePoints = useMemo(() => {
-    return points.map(p => new THREE.Vector3(p.x, p.y, 0));
+  const lineKey = useMemo(() => {
+    return points.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join('|');
   }, [points]);
 
+  if (points.length < 2) return null;
+
+  const positionArray = new Float32Array(points.flatMap(p => [p.x, p.y, 0]));
+
   return (
-    <line>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={linePoints.length}
-          array={new Float32Array(linePoints.flatMap(p => [p.x, p.y, p.z]))}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineDashedMaterial 
-        color={color} 
-        dashSize={dashed ? 0.3 : 100} 
-        gapSize={dashed ? 0.15 : 0}
-        opacity={0.7}
-        transparent
-      />
-    </line>
+    <primitive 
+      key={lineKey}
+      object={createLine(positionArray, color, dashed)} 
+    />
   );
+}
+
+function createLine(positions: Float32Array, color: string, dashed: boolean): THREE.Line {
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  
+  const material = new THREE.LineDashedMaterial({
+    color,
+    dashSize: dashed ? 0.3 : 100,
+    gapSize: dashed ? 0.15 : 0,
+    opacity: 0.7,
+    transparent: true,
+  });
+  
+  const line = new THREE.Line(geometry, material);
+  line.computeLineDistances();
+  return line;
 }
 
 interface ActualTrajectoryProps {
