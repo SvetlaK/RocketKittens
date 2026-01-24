@@ -9,6 +9,15 @@ let shotAnimationFrame = 0;
 const GROUND_Y = canvas.height * 0.7;
 const SCALE = 15;
 
+const KITTEN_NAMES = {
+    'player1': 'Whiskers',
+    'player2': 'Mittens'
+};
+
+function getKittenName(playerId) {
+    return KITTEN_NAMES[playerId] || playerId;
+}
+
 socket.on('connect', () => {
     console.log('Connected to server');
 });
@@ -139,13 +148,13 @@ function updateUI() {
     if (gameState.phase === 'game_over') {
         const winner = gameState.players.find(p => p.id === gameState.winner);
         document.getElementById('winner-text').textContent = 
-            `${winner.id === 'player1' ? 'Red' : 'Blue'} Kitten Wins!`;
+            `${getKittenName(winner.id)} Wins!`;
     }
     
     const currentPlayer = getCurrentPlayer();
     if (currentPlayer) {
         document.getElementById('current-player').textContent = 
-            `${currentPlayer.id === 'player1' ? 'Red' : 'Blue'} Kitten's Turn`;
+            `${getKittenName(currentPlayer.id)}'s Turn`;
         document.getElementById('current-player').style.color = currentPlayer.color;
         
         document.getElementById('angle-display').textContent = currentPlayer.angle.toFixed(0);
@@ -203,56 +212,208 @@ function render() {
 
 function drawKitten(player) {
     const pos = worldToCanvas(player.position.x, player.position.y);
+    const isWhiskers = player.id === 'player1';
     
+    // Body - fluffy oval shape
     ctx.fillStyle = player.color;
     ctx.beginPath();
-    ctx.ellipse(pos.x, pos.y - 20, 25, 30, 0, 0, Math.PI * 2);
+    ctx.ellipse(pos.x, pos.y - 15, 28, 22, 0, 0, Math.PI * 2);
     ctx.fill();
+    
+    // Body outline for fluffiness
+    ctx.strokeStyle = isWhiskers ? '#cc3333' : '#2266aa';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Head - rounder and bigger
+    ctx.fillStyle = player.color;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y - 40, 22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = isWhiskers ? '#cc3333' : '#2266aa';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Ears - triangular and pointy
+    ctx.fillStyle = player.color;
+    ctx.beginPath();
+    ctx.moveTo(pos.x - 18, pos.y - 55);
+    ctx.lineTo(pos.x - 8, pos.y - 35);
+    ctx.lineTo(pos.x - 22, pos.y - 38);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
     
     ctx.beginPath();
-    ctx.moveTo(pos.x - 20, pos.y - 45);
-    ctx.lineTo(pos.x - 10, pos.y - 25);
-    ctx.lineTo(pos.x - 5, pos.y - 40);
+    ctx.moveTo(pos.x + 18, pos.y - 55);
+    ctx.lineTo(pos.x + 8, pos.y - 35);
+    ctx.lineTo(pos.x + 22, pos.y - 38);
+    ctx.closePath();
     ctx.fill();
+    ctx.stroke();
     
-    ctx.beginPath();
-    ctx.moveTo(pos.x + 20, pos.y - 45);
-    ctx.lineTo(pos.x + 10, pos.y - 25);
-    ctx.lineTo(pos.x + 5, pos.y - 40);
-    ctx.fill();
-    
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(pos.x - 8, pos.y - 25, 6, 0, Math.PI * 2);
-    ctx.arc(pos.x + 8, pos.y - 25, 6, 0, Math.PI * 2);
-    ctx.fill();
-    
-    ctx.fillStyle = 'black';
-    ctx.beginPath();
-    ctx.arc(pos.x - 8, pos.y - 25, 3, 0, Math.PI * 2);
-    ctx.arc(pos.x + 8, pos.y - 25, 3, 0, Math.PI * 2);
-    ctx.fill();
-    
+    // Inner ears (pink)
     ctx.fillStyle = '#ffb6c1';
     ctx.beginPath();
-    ctx.ellipse(pos.x, pos.y - 15, 5, 3, 0, 0, Math.PI * 2);
+    ctx.moveTo(pos.x - 16, pos.y - 50);
+    ctx.lineTo(pos.x - 10, pos.y - 38);
+    ctx.lineTo(pos.x - 19, pos.y - 40);
+    ctx.closePath();
     ctx.fill();
     
+    ctx.beginPath();
+    ctx.moveTo(pos.x + 16, pos.y - 50);
+    ctx.lineTo(pos.x + 10, pos.y - 38);
+    ctx.lineTo(pos.x + 19, pos.y - 40);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Stripes/markings for Whiskers (orange tabby style)
+    if (isWhiskers) {
+        ctx.strokeStyle = '#cc6600';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(pos.x - 5, pos.y - 52);
+        ctx.lineTo(pos.x - 5, pos.y - 45);
+        ctx.moveTo(pos.x, pos.y - 54);
+        ctx.lineTo(pos.x, pos.y - 46);
+        ctx.moveTo(pos.x + 5, pos.y - 52);
+        ctx.lineTo(pos.x + 5, pos.y - 45);
+        ctx.stroke();
+    }
+    
+    // Eyes - big and cute
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.ellipse(pos.x - 8, pos.y - 42, 7, 8, 0, 0, Math.PI * 2);
+    ctx.ellipse(pos.x + 8, pos.y - 42, 7, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Pupils - vertical slits
+    ctx.fillStyle = isWhiskers ? '#228B22' : '#4169E1';
+    ctx.beginPath();
+    ctx.ellipse(pos.x - 8, pos.y - 42, 3, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(pos.x + 8, pos.y - 42, 3, 6, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Eye shine
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(pos.x - 6, pos.y - 44, 2, 0, Math.PI * 2);
+    ctx.arc(pos.x + 10, pos.y - 44, 2, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Nose - triangle
+    ctx.fillStyle = '#ff9999';
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y - 35);
+    ctx.lineTo(pos.x - 4, pos.y - 30);
+    ctx.lineTo(pos.x + 4, pos.y - 30);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Mouth - cute W shape
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(pos.x - 6, pos.y - 26);
+    ctx.quadraticCurveTo(pos.x - 3, pos.y - 23, pos.x, pos.y - 26);
+    ctx.quadraticCurveTo(pos.x + 3, pos.y - 23, pos.x + 6, pos.y - 26);
+    ctx.stroke();
+    
+    // Whiskers
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    // Left whiskers
+    ctx.beginPath();
+    ctx.moveTo(pos.x - 12, pos.y - 32);
+    ctx.lineTo(pos.x - 28, pos.y - 35);
+    ctx.moveTo(pos.x - 12, pos.y - 30);
+    ctx.lineTo(pos.x - 28, pos.y - 30);
+    ctx.moveTo(pos.x - 12, pos.y - 28);
+    ctx.lineTo(pos.x - 28, pos.y - 25);
+    ctx.stroke();
+    // Right whiskers
+    ctx.beginPath();
+    ctx.moveTo(pos.x + 12, pos.y - 32);
+    ctx.lineTo(pos.x + 28, pos.y - 35);
+    ctx.moveTo(pos.x + 12, pos.y - 30);
+    ctx.lineTo(pos.x + 28, pos.y - 30);
+    ctx.moveTo(pos.x + 12, pos.y - 28);
+    ctx.lineTo(pos.x + 28, pos.y - 25);
+    ctx.stroke();
+    
+    // Front paws
+    ctx.fillStyle = player.color;
+    ctx.beginPath();
+    ctx.ellipse(pos.x - 15, pos.y + 5, 8, 6, -0.3, 0, Math.PI * 2);
+    ctx.ellipse(pos.x + 15, pos.y + 5, 8, 6, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = isWhiskers ? '#cc3333' : '#2266aa';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    
+    // Paw pads (pink toes)
+    ctx.fillStyle = '#ffb6c1';
+    ctx.beginPath();
+    ctx.arc(pos.x - 18, pos.y + 6, 3, 0, Math.PI * 2);
+    ctx.arc(pos.x - 12, pos.y + 6, 3, 0, Math.PI * 2);
+    ctx.arc(pos.x + 18, pos.y + 6, 3, 0, Math.PI * 2);
+    ctx.arc(pos.x + 12, pos.y + 6, 3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Tail - curly and fluffy
+    ctx.strokeStyle = player.color;
+    ctx.lineWidth = 8;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    if (player.facing_right) {
+        ctx.moveTo(pos.x - 25, pos.y - 10);
+        ctx.quadraticCurveTo(pos.x - 45, pos.y - 25, pos.x - 35, pos.y - 45);
+    } else {
+        ctx.moveTo(pos.x + 25, pos.y - 10);
+        ctx.quadraticCurveTo(pos.x + 45, pos.y - 25, pos.x + 35, pos.y - 45);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = isWhiskers ? '#cc3333' : '#2266aa';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Name tag above kitten
+    ctx.font = 'bold 14px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 3;
+    const name = getKittenName(player.id);
+    ctx.strokeText(name, pos.x, pos.y - 70);
+    ctx.fillText(name, pos.x, pos.y - 70);
+    
+    // Aim indicator when it's this kitten's turn
     if (player.id === gameState.current_player_id && gameState.phase === 'aiming') {
         const angleRad = player.angle * Math.PI / 180;
         const aimLength = 40 + (player.power / 100) * 30;
         
+        // Yarn ball at the end of aim line
         ctx.strokeStyle = '#f39c12';
         ctx.lineWidth = 3;
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        ctx.moveTo(pos.x, pos.y - 20);
-        ctx.lineTo(
-            pos.x + Math.cos(angleRad) * aimLength * (player.facing_right ? 1 : -1),
-            pos.y - 20 - Math.sin(angleRad) * aimLength
-        );
+        ctx.moveTo(pos.x, pos.y - 35);
+        const aimEndX = pos.x + Math.cos(angleRad) * aimLength * (player.facing_right ? 1 : -1);
+        const aimEndY = pos.y - 35 - Math.sin(angleRad) * aimLength;
+        ctx.lineTo(aimEndX, aimEndY);
         ctx.stroke();
         ctx.setLineDash([]);
+        
+        // Yarn ball preview
+        ctx.fillStyle = '#f39c12';
+        ctx.beginPath();
+        ctx.arc(aimEndX, aimEndY, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#e67e22';
+        ctx.lineWidth = 2;
+        ctx.stroke();
     }
 }
 
