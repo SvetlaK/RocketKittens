@@ -15,7 +15,7 @@ from server.ai.sensor_fusion import KalmanFilter, ParticleFilter
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'rocket-kittens-secret'
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 games = {}
 
@@ -365,4 +365,4 @@ def update_trajectory_preview(game):
     game['predicted_trajectory'] = trajectory
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True, use_reloader=False, log_output=True)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False, allow_unsafe_werkzeug=True)
