@@ -1,0 +1,46 @@
+Core GA reference (Task 1 basic implementation)
+------------------------------------------------
+- Russell, S. & Norvig, P., "Artificial Intelligence: A Modern Approach" (relevant
+  edition per course materials), Chapter 4: the GENETIC-ALGORITHM / RANDOM-SELECTION
+  pseudocode our basic GA follows directly.
+
+Niching / multimodal GAs (relevant to: Task 2 extension — finding ALL solutions)
+----------------------------------------------------------------------------------
+- Goldberg, D.E. & Richardson, J. (1987). "Genetic algorithms with sharing for
+  multimodal function optimization." Proceedings of the 2nd International Conference
+  on Genetic Algorithms (ICGA), pp. 41-49.
+  -> The original fitness-sharing paper; core citation for making a GA maintain
+     multiple distinct solutions instead of converging on one.
+
+- Mahfoud, S.W. (1995). "Niching Methods for Genetic Algorithms." PhD thesis,
+  IlliGAL Report No. 95001, University of Illinois at Urbana-Champaign.
+  -> Broad survey of niching techniques (fitness sharing, crowding, speciation);
+     useful for comparing approaches in the report.
+
+- De Jong, K.A. (1975). "An Analysis of the Behavior of a Class of Genetic Adaptive
+  Systems." PhD thesis, University of Michigan.
+  -> Introduced "crowding," the earliest niching-adjacent technique; good for
+     historical framing.
+
+Memetic / hybrid GAs (relevant to: Task 2 optimisation — planned repair operator)
+------------------------------------------------------------------------------------
+- Moscato, P. (1989). "On Evolution, Search, Optimization, Genetic Algorithms and
+  Martial Arts: Towards Memetic Algorithms." Caltech Concurrent Computation Program,
+  Report 826.
+  -> Founding memetic-algorithm paper: hybridising a GA with local search / repair.
+
+- Whitley, D., Gordon, V.S. & Mathias, K. (1994). "Lamarckian Evolution, the Baldwin
+  Effect and Function Optimization." Parallel Problem Solving from Nature (PPSN III).
+  -> Lamarckian vs. Baldwinian framing for whether a repaired chromosome replaces the
+     original in the population, or only affects fitness evaluation.
+
+N-Queens solution counting (context for: why "all solutions" isn't just a lookup)
+------------------------------------------------------------------------------------
+- OEIS A000170 — number of ways to place n non-attacking queens on an n x n board
+  (total solutions, symmetric duplicates counted separately).
+- OEIS A002562 — number of inequivalent (fundamental / symmetry-reduced) solutions.
+- Simkin, M. (2021). "The number of n-queens configurations." (Building on prior work
+  by Luria, 2017.)
+  -> Proves an asymptotic growth rate for the number of solutions
+     (~ (n * e^-alpha)^n for a constant alpha ~ 1.942); there is no known closed-form
+     formula, and the counting problem is #P-complete, so none is expected.
